@@ -5,8 +5,12 @@
   </header> -->
   <main>
     
-    <div id="ol-map" class="map-container"></div>
+    <div id="ol-map" class="map-container" style="width:100%;height:500px;"></div>
     <app-map [map]="map"></app-map>
+    <div id="marker" class="marker">
+      <img src="https://res.cloudinary.com/dg3ksfbz0/image/upload/v1675773517/map-marker_bnq3yx.png" alt="marker">
+    </div>
+    
   </main>
   <footer>
     <app-scaleline [map]="map"></app-scaleline>
