@@ -3,10 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MapComponent } from './components/map/map.component';
+import { ScalelineComponent } from './components/scaleline/scaleline.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MapComponent,
+    ScalelineComponent,
+    
   ],
   imports: [
     BrowserModule,
