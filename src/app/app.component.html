@@ -1,17 +1,19 @@
-<!-- <app-maps-layer1></app-maps-layer1> -->
-
-<!-- <header>
-    <div class="title">Map Viewer - Openlayers & Angular</div>
-  </header> -->
-  <main>
+<main>
+  
+  <div id="ol-map" class="map-container" style="width:100%;height:500px;"></div>
     
-    <div id="ol-map" class="map-container" style="width:100%;height:500px;"></div>
-    <app-map [map]="map"></app-map>
-    <div id="marker" class="marker">
-      <img src="https://res.cloudinary.com/dg3ksfbz0/image/upload/v1675773517/map-marker_bnq3yx.png" alt="marker">
-    </div>
+    
     
   </main>
   <footer>
     <app-scaleline [map]="map"></app-scaleline>
   </footer>
+  <!-- <div id="marker" class="marker">
+    <img class="pointer" src="https://res.cloudinary.com/dg3ksfbz0/image/upload/v1675773517/map-marker_bnq3yx.png" alt="marker">
+  </div> -->
+  <!-- <app-map [map]="map"></app-map> -->
+  <!-- <app-maps-layer1></app-maps-layer1> -->
+  
+  <!-- <header>
+      <div class="title">Map Viewer - Openlayers & Angular</div>
+    </header> -->

@@ -3,87 +3,135 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import Overlay from 'ol/Overlay';
+
 import { fromLonLat } from 'ol/proj';
+import {Icon, Stroke, Style } from 'ol/style';
+import { Feature } from 'ol';
+import { Point } from 'ol/geom';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import { unByKey } from 'ol/Observable';
+import { getVectorContext } from 'ol/render';
+import { easeOut } from 'ol/easing';
+import CircleStyle from 'ol/style/Circle';
+import {HttpClient} from '@angular/common/http'
+import { LocationsData } from './components/location';
+import XyzSource from 'ol/source/XYZ'
+
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+ 
   title = 'openlayers-angular';
 
   map: Map | any
+  locationsList :any[]=[] 
+  
+  vectorSource: any;
+  marker: Map | any;
+  vectorLayer: | any;
+  tileLayer:  | any;
+  view: | any;
+  xyzSource: any;
+  chicago: any;
+  london: any;
 
-  ngOnInit(): void {
-    this.map = new Map({
-      view: new View({
-        center: [0, 0],
-        zoom: 1,
-      }),
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
-      target: 'ol-map'
-    });
-    const marker = new Overlay({
-      position: fromLonLat([37.41, 8.82]),
-      positioning: 'center-center',
-      element: document.getElementById('marker'),
-      stopEvent: false
-    });
-    this.map.addOverlay(marker);
+
+  // map: Map ;
+  // vectorSource: VectorSource;
+  // vectorLayer: VectorLayer;
+  // xyzSource: XyzSource;
+  // tileLayer: TileLayer;
+  // view: View;
+  // marker: Feature;
+  //  locationsList:LocationsData[] =[]
+  
+  // const fileData = fs.readFileSync(mapsData.json)
+
+  // map;
+  // chicago;
+  // vectorSource;
+  // vectorLayer;
+  // rasterLayer;
+  // london: any;
+  // madrid: any;
+  
+  constructor(private http:HttpClient){
+    this.http.get('assets/mapsdata.json').subscribe((data:any)=>{
+      // this.locationsList.push(data)
+      if(data){
+        data.map((e:any)=>{
+          this.locationsList.push(e)
+        })
+      }else{
+        console.log('Error occured')
+      }
+
+    })
+    
+    
   }
+
+  
+  ngOnInit(): void {
+
+    this.initilizeMap();
+ 
+  }
+  initilizeMap(){
+
+     this.london = new Feature({
+      geometry: new Point(fromLonLat([-0.12755, 51.507222])),
+    });
+    
+
+    // this.chicago.setStyle(new Style({
+    //   image: new Icon(({
+    //     color: '#8959A8',
+    //     crossOrigin: 'anonymous',
+    //     src: '/src/assets/map-marker.png',
+    //     imgSize: [20, 20]
+    //   }))
+    // }));
+
+    this.london.setStyle(
+      new Style({
+        image: new Icon({
+          color: 'rgba(255, 0, 0, .5)',
+          crossOrigin: 'anonymous',
+          src: 'data/bigdot.png',
+          scale: 0.2,
+        }),
+      })
+    );
+
+    this.vectorSource = new VectorSource({
+      features: [this.london]
+    });
+
+
+    this.vectorLayer = new VectorLayer({
+      source: this.vectorSource
+    });
+
+    this.map = new Map({
+      target: 'ol-map',
+      layers: [ new TileLayer({
+        source: new OSM()
+      }), this.vectorLayer ],
+      view: new View({
+        center: fromLonLat([0, 0]),
+        zoom: 4
+      })
+    });
+
+
+  }
+
+  
 }
-
-
-
-
-
-
-// var sites new OpenLayers.Layer.Markers( 'Sites' );
-// map.addLayer( sites );
-// addSiteMarkers( sites );
-
-// function addMarker( layer, lat, lng, img ) {
-//   var size   = new OpenLayers.Size( 32, 37 );
-//   var offset = new OpenLayers.Pixel( -(size.w/2), -size.h );
-//   var icon   = new OpenLayers.Icon( 'img/marker/' + img, size, offset );
-//   var marker = new OpenLayers.Marker( getLocation( lat, lng ), icon );
-
-//   layer.addMarker( marker );
-
-//   marker.events.register( 'click', layer, clickMarker );
-// }
-
-// function clickMarker() {
-//   alert( 'click' );
-
-//   // Pop-up code will go here...
-// }
-
-// function addSiteMarkers( sites ) {
-//   addMarker( sites, -113.3017895, 49.1939798, 'store.png' );
-//   addMarker( sites, -113.3072538, 49.2013626, 'building.png' );
-// }
-
-// map = new OpenLayers.Map("mapdiv");
-//     map.addLayer(new OpenLayers.Layer.OSM());
-
-//     //var results = new OpenLayers.Layer.Text("My Points", { location:"./checkIns_0_view.txt", projection: map.displayProjection});
-//     //map.addLayer(results);
-
-//     var query = new OpenLayers.LonLat(-122.2928337167, 37.5549570333).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
-//     var markers = new OpenLayers.Layer.Markers("Markers");
-//     map.addLayer(markers);
-//     var size = new OpenLayers.Size(21,25);
-//     var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-//     var icon = new OpenLayers.Icon('http://openlayers.org/dev/img/marker-blue.png', size, offset);
-//     marker = new OpenLayers.Marker(query, icon);
-//     markers.addMarker(marker);
-
-//     var zoom=16;
-//     map.setCenter (query, zoom);

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "jsondat-open-layers": {
+      "hosting": {
+        "openlayers-angular": [
+          "jsondat-open-layers"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "jsondat-open-layers"
+  }
+}
